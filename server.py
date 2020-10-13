@@ -18,6 +18,12 @@ class ExamServiceHandler:
     def getExamReport(self, request: GetExamReportRequest) -> GetExamReportResponse:
         return handler.get_exam_report(request)
 
+    def computeExamScore(self, request: ComputeExamScoreRequest) -> ComputeExamScoreResponse:
+        return handler.compute_exam_score(request)
+
+    def getExamRecord(self, request: GetExamRecordRequest) -> GetExamRecordResponse:
+        return handler.get_exam_record(request)
+
 
 if __name__ == '__main__':
     # init mongo

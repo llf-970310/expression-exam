@@ -25,6 +25,8 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
     print('')
     print('Functions:')
     print('  GetExamReportResponse getExamReport(GetExamReportRequest request)')
+    print('  ComputeExamScoreResponse computeExamScore(ComputeExamScoreRequest request)')
+    print('  GetExamRecordResponse getExamRecord(GetExamRecordRequest request)')
     print('')
     sys.exit(0)
 
@@ -109,6 +111,18 @@ if cmd == 'getExamReport':
         print('getExamReport requires 1 args')
         sys.exit(1)
     pp.pprint(client.getExamReport(eval(args[0]),))
+
+elif cmd == 'computeExamScore':
+    if len(args) != 1:
+        print('computeExamScore requires 1 args')
+        sys.exit(1)
+    pp.pprint(client.computeExamScore(eval(args[0]),))
+
+elif cmd == 'getExamRecord':
+    if len(args) != 1:
+        print('getExamRecord requires 1 args')
+        sys.exit(1)
+    pp.pprint(client.getExamRecord(eval(args[0]),))
 
 else:
     print('Unrecognized method %s' % cmd)
