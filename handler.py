@@ -59,3 +59,21 @@ def get_exam_record(request: GetExamRecordRequest) -> GetExamRecordResponse:
         fill_status_of_resp(resp, e)
 
     return resp
+
+
+def init_new_audio_test(request: InitNewAudioTestRequest) -> InitNewAudioTestResponse:
+    resp = InitNewAudioTestResponse()
+    user_id = request.userId
+
+    if not user_id:
+        fill_status_of_resp(resp, InvalidParam())
+        return resp
+
+    try:
+        audio_test_info = service.init_new_audio_test(user_id)
+        resp.question = audio_test_info
+        fill_status_of_resp(resp)
+    except ErrorWithCode as e:
+        fill_status_of_resp(resp, e)
+
+    return resp

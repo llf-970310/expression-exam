@@ -369,6 +369,184 @@ class ExamRecord(object):
         return not (self == other)
 
 
+class QuestionInfo(object):
+    """
+    Attributes:
+     - id
+     - content
+     - type
+     - questionNum
+     - readLimitTime
+     - answerLimitTime
+     - isLastQuestion
+     - questionTip
+     - examTime
+     - examLeftTime
+
+    """
+
+
+    def __init__(self, id=None, content=None, type=None, questionNum=None, readLimitTime=None, answerLimitTime=None, isLastQuestion=None, questionTip=None, examTime=None, examLeftTime=None,):
+        self.id = id
+        self.content = content
+        self.type = type
+        self.questionNum = questionNum
+        self.readLimitTime = readLimitTime
+        self.answerLimitTime = answerLimitTime
+        self.isLastQuestion = isLastQuestion
+        self.questionTip = questionTip
+        self.examTime = examTime
+        self.examLeftTime = examLeftTime
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRING:
+                    self.id = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.STRING:
+                    self.content = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 3:
+                if ftype == TType.I32:
+                    self.type = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 4:
+                if ftype == TType.I32:
+                    self.questionNum = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 5:
+                if ftype == TType.I32:
+                    self.readLimitTime = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 6:
+                if ftype == TType.I32:
+                    self.answerLimitTime = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 7:
+                if ftype == TType.BOOL:
+                    self.isLastQuestion = iprot.readBool()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 8:
+                if ftype == TType.MAP:
+                    self.questionTip = {}
+                    (_ktype15, _vtype16, _size14) = iprot.readMapBegin()
+                    for _i18 in range(_size14):
+                        _key19 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                        _val20 = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                        self.questionTip[_key19] = _val20
+                    iprot.readMapEnd()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 9:
+                if ftype == TType.DOUBLE:
+                    self.examTime = iprot.readDouble()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 10:
+                if ftype == TType.DOUBLE:
+                    self.examLeftTime = iprot.readDouble()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('QuestionInfo')
+        if self.id is not None:
+            oprot.writeFieldBegin('id', TType.STRING, 1)
+            oprot.writeString(self.id.encode('utf-8') if sys.version_info[0] == 2 else self.id)
+            oprot.writeFieldEnd()
+        if self.content is not None:
+            oprot.writeFieldBegin('content', TType.STRING, 2)
+            oprot.writeString(self.content.encode('utf-8') if sys.version_info[0] == 2 else self.content)
+            oprot.writeFieldEnd()
+        if self.type is not None:
+            oprot.writeFieldBegin('type', TType.I32, 3)
+            oprot.writeI32(self.type)
+            oprot.writeFieldEnd()
+        if self.questionNum is not None:
+            oprot.writeFieldBegin('questionNum', TType.I32, 4)
+            oprot.writeI32(self.questionNum)
+            oprot.writeFieldEnd()
+        if self.readLimitTime is not None:
+            oprot.writeFieldBegin('readLimitTime', TType.I32, 5)
+            oprot.writeI32(self.readLimitTime)
+            oprot.writeFieldEnd()
+        if self.answerLimitTime is not None:
+            oprot.writeFieldBegin('answerLimitTime', TType.I32, 6)
+            oprot.writeI32(self.answerLimitTime)
+            oprot.writeFieldEnd()
+        if self.isLastQuestion is not None:
+            oprot.writeFieldBegin('isLastQuestion', TType.BOOL, 7)
+            oprot.writeBool(self.isLastQuestion)
+            oprot.writeFieldEnd()
+        if self.questionTip is not None:
+            oprot.writeFieldBegin('questionTip', TType.MAP, 8)
+            oprot.writeMapBegin(TType.STRING, TType.STRING, len(self.questionTip))
+            for kiter21, viter22 in self.questionTip.items():
+                oprot.writeString(kiter21.encode('utf-8') if sys.version_info[0] == 2 else kiter21)
+                oprot.writeString(viter22.encode('utf-8') if sys.version_info[0] == 2 else viter22)
+            oprot.writeMapEnd()
+            oprot.writeFieldEnd()
+        if self.examTime is not None:
+            oprot.writeFieldBegin('examTime', TType.DOUBLE, 9)
+            oprot.writeDouble(self.examTime)
+            oprot.writeFieldEnd()
+        if self.examLeftTime is not None:
+            oprot.writeFieldBegin('examLeftTime', TType.DOUBLE, 10)
+            oprot.writeDouble(self.examLeftTime)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        if self.id is None:
+            raise TProtocolException(message='Required field id is unset!')
+        if self.content is None:
+            raise TProtocolException(message='Required field content is unset!')
+        if self.type is None:
+            raise TProtocolException(message='Required field type is unset!')
+        if self.readLimitTime is None:
+            raise TProtocolException(message='Required field readLimitTime is unset!')
+        if self.answerLimitTime is None:
+            raise TProtocolException(message='Required field answerLimitTime is unset!')
+        if self.questionTip is None:
+            raise TProtocolException(message='Required field questionTip is unset!')
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+
+
 class GetExamReportRequest(object):
     """
     Attributes:
@@ -768,11 +946,11 @@ class GetExamRecordResponse(object):
             if fid == 1:
                 if ftype == TType.LIST:
                     self.examList = []
-                    (_etype17, _size14) = iprot.readListBegin()
-                    for _i18 in range(_size14):
-                        _elem19 = ExamRecord()
-                        _elem19.read(iprot)
-                        self.examList.append(_elem19)
+                    (_etype26, _size23) = iprot.readListBegin()
+                    for _i27 in range(_size23):
+                        _elem28 = ExamRecord()
+                        _elem28.read(iprot)
+                        self.examList.append(_elem28)
                     iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
@@ -799,8 +977,8 @@ class GetExamRecordResponse(object):
         if self.examList is not None:
             oprot.writeFieldBegin('examList', TType.LIST, 1)
             oprot.writeListBegin(TType.STRUCT, len(self.examList))
-            for iter20 in self.examList:
-                iter20.write(oprot)
+            for iter29 in self.examList:
+                iter29.write(oprot)
             oprot.writeListEnd()
             oprot.writeFieldEnd()
         if self.statusCode is not None:
@@ -817,6 +995,309 @@ class GetExamRecordResponse(object):
     def validate(self):
         if self.examList is None:
             raise TProtocolException(message='Required field examList is unset!')
+        if self.statusCode is None:
+            raise TProtocolException(message='Required field statusCode is unset!')
+        if self.statusMsg is None:
+            raise TProtocolException(message='Required field statusMsg is unset!')
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+
+
+class InitNewAudioTestRequest(object):
+    """
+    Attributes:
+     - userId
+
+    """
+
+
+    def __init__(self, userId=None,):
+        self.userId = userId
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRING:
+                    self.userId = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('InitNewAudioTestRequest')
+        if self.userId is not None:
+            oprot.writeFieldBegin('userId', TType.STRING, 1)
+            oprot.writeString(self.userId.encode('utf-8') if sys.version_info[0] == 2 else self.userId)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        if self.userId is None:
+            raise TProtocolException(message='Required field userId is unset!')
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+
+
+class InitNewAudioTestResponse(object):
+    """
+    Attributes:
+     - question
+     - statusCode
+     - statusMsg
+
+    """
+
+
+    def __init__(self, question=None, statusCode=None, statusMsg=None,):
+        self.question = question
+        self.statusCode = statusCode
+        self.statusMsg = statusMsg
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRUCT:
+                    self.question = QuestionInfo()
+                    self.question.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.I32:
+                    self.statusCode = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 3:
+                if ftype == TType.STRING:
+                    self.statusMsg = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('InitNewAudioTestResponse')
+        if self.question is not None:
+            oprot.writeFieldBegin('question', TType.STRUCT, 1)
+            self.question.write(oprot)
+            oprot.writeFieldEnd()
+        if self.statusCode is not None:
+            oprot.writeFieldBegin('statusCode', TType.I32, 2)
+            oprot.writeI32(self.statusCode)
+            oprot.writeFieldEnd()
+        if self.statusMsg is not None:
+            oprot.writeFieldBegin('statusMsg', TType.STRING, 3)
+            oprot.writeString(self.statusMsg.encode('utf-8') if sys.version_info[0] == 2 else self.statusMsg)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        if self.question is None:
+            raise TProtocolException(message='Required field question is unset!')
+        if self.statusCode is None:
+            raise TProtocolException(message='Required field statusCode is unset!')
+        if self.statusMsg is None:
+            raise TProtocolException(message='Required field statusMsg is unset!')
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+
+
+class GetQuestionInfoRequest(object):
+    """
+    Attributes:
+     - examId
+     - questionNum
+
+    """
+
+
+    def __init__(self, examId=None, questionNum=None,):
+        self.examId = examId
+        self.questionNum = questionNum
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRING:
+                    self.examId = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.I32:
+                    self.questionNum = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('GetQuestionInfoRequest')
+        if self.examId is not None:
+            oprot.writeFieldBegin('examId', TType.STRING, 1)
+            oprot.writeString(self.examId.encode('utf-8') if sys.version_info[0] == 2 else self.examId)
+            oprot.writeFieldEnd()
+        if self.questionNum is not None:
+            oprot.writeFieldBegin('questionNum', TType.I32, 2)
+            oprot.writeI32(self.questionNum)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        if self.examId is None:
+            raise TProtocolException(message='Required field examId is unset!')
+        if self.questionNum is None:
+            raise TProtocolException(message='Required field questionNum is unset!')
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+
+
+class GetQuestionInfoResponse(object):
+    """
+    Attributes:
+     - question
+     - statusCode
+     - statusMsg
+
+    """
+
+
+    def __init__(self, question=None, statusCode=None, statusMsg=None,):
+        self.question = question
+        self.statusCode = statusCode
+        self.statusMsg = statusMsg
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRUCT:
+                    self.question = QuestionInfo()
+                    self.question.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            elif fid == 3:
+                if ftype == TType.I32:
+                    self.statusCode = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 4:
+                if ftype == TType.STRING:
+                    self.statusMsg = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('GetQuestionInfoResponse')
+        if self.question is not None:
+            oprot.writeFieldBegin('question', TType.STRUCT, 1)
+            self.question.write(oprot)
+            oprot.writeFieldEnd()
+        if self.statusCode is not None:
+            oprot.writeFieldBegin('statusCode', TType.I32, 3)
+            oprot.writeI32(self.statusCode)
+            oprot.writeFieldEnd()
+        if self.statusMsg is not None:
+            oprot.writeFieldBegin('statusMsg', TType.STRING, 4)
+            oprot.writeString(self.statusMsg.encode('utf-8') if sys.version_info[0] == 2 else self.statusMsg)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        if self.question is None:
+            raise TProtocolException(message='Required field question is unset!')
         if self.statusCode is None:
             raise TProtocolException(message='Required field statusCode is unset!')
         if self.statusMsg is None:
@@ -863,6 +1344,20 @@ ExamRecord.thrift_spec = (
     (3, TType.STRING, 'examId', 'UTF8', None, ),  # 3
     (4, TType.STRUCT, 'scoreInfo', [ExamScore, None], None, ),  # 4
 )
+all_structs.append(QuestionInfo)
+QuestionInfo.thrift_spec = (
+    None,  # 0
+    (1, TType.STRING, 'id', 'UTF8', None, ),  # 1
+    (2, TType.STRING, 'content', 'UTF8', None, ),  # 2
+    (3, TType.I32, 'type', None, None, ),  # 3
+    (4, TType.I32, 'questionNum', None, None, ),  # 4
+    (5, TType.I32, 'readLimitTime', None, None, ),  # 5
+    (6, TType.I32, 'answerLimitTime', None, None, ),  # 6
+    (7, TType.BOOL, 'isLastQuestion', None, None, ),  # 7
+    (8, TType.MAP, 'questionTip', (TType.STRING, 'UTF8', TType.STRING, 'UTF8', False), None, ),  # 8
+    (9, TType.DOUBLE, 'examTime', None, None, ),  # 9
+    (10, TType.DOUBLE, 'examLeftTime', None, None, ),  # 10
+)
 all_structs.append(GetExamReportRequest)
 GetExamReportRequest.thrift_spec = (
     None,  # 0
@@ -900,6 +1395,32 @@ GetExamRecordResponse.thrift_spec = (
     (1, TType.LIST, 'examList', (TType.STRUCT, [ExamRecord, None], False), None, ),  # 1
     (2, TType.I32, 'statusCode', None, None, ),  # 2
     (3, TType.STRING, 'statusMsg', 'UTF8', None, ),  # 3
+)
+all_structs.append(InitNewAudioTestRequest)
+InitNewAudioTestRequest.thrift_spec = (
+    None,  # 0
+    (1, TType.STRING, 'userId', 'UTF8', None, ),  # 1
+)
+all_structs.append(InitNewAudioTestResponse)
+InitNewAudioTestResponse.thrift_spec = (
+    None,  # 0
+    (1, TType.STRUCT, 'question', [QuestionInfo, None], None, ),  # 1
+    (2, TType.I32, 'statusCode', None, None, ),  # 2
+    (3, TType.STRING, 'statusMsg', 'UTF8', None, ),  # 3
+)
+all_structs.append(GetQuestionInfoRequest)
+GetQuestionInfoRequest.thrift_spec = (
+    None,  # 0
+    (1, TType.STRING, 'examId', 'UTF8', None, ),  # 1
+    (2, TType.I32, 'questionNum', None, None, ),  # 2
+)
+all_structs.append(GetQuestionInfoResponse)
+GetQuestionInfoResponse.thrift_spec = (
+    None,  # 0
+    (1, TType.STRUCT, 'question', [QuestionInfo, None], None, ),  # 1
+    None,  # 2
+    (3, TType.I32, 'statusCode', None, None, ),  # 3
+    (4, TType.STRING, 'statusMsg', 'UTF8', None, ),  # 4
 )
 fix_spec(all_structs)
 del all_structs

@@ -24,6 +24,9 @@ class ExamServiceHandler:
     def getExamRecord(self, request: GetExamRecordRequest) -> GetExamRecordResponse:
         return handler.get_exam_record(request)
 
+    def initNewAudioTest(self, request: InitNewAudioTestRequest) -> InitNewAudioTestResponse:
+        return handler.init_new_audio_test(request)
+
 
 if __name__ == '__main__':
     # init mongo

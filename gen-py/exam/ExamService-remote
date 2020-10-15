@@ -24,6 +24,8 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
     print('Usage: ' + sys.argv[0] + ' [-h host[:port]] [-u url] [-f[ramed]] [-s[sl]] [-novalidate] [-ca_certs certs] [-keyfile keyfile] [-certfile certfile] function [arg1 [arg2...]]')
     print('')
     print('Functions:')
+    print('  InitNewAudioTestResponse initNewAudioTest(InitNewAudioTestRequest request)')
+    print('  GetQuestionInfoResponse getQuestionInfo(GetQuestionInfoRequest request)')
     print('  GetExamReportResponse getExamReport(GetExamReportRequest request)')
     print('  ComputeExamScoreResponse computeExamScore(ComputeExamScoreRequest request)')
     print('  GetExamRecordResponse getExamRecord(GetExamRecordRequest request)')
@@ -106,7 +108,19 @@ protocol = TBinaryProtocol(transport)
 client = ExamService.Client(protocol)
 transport.open()
 
-if cmd == 'getExamReport':
+if cmd == 'initNewAudioTest':
+    if len(args) != 1:
+        print('initNewAudioTest requires 1 args')
+        sys.exit(1)
+    pp.pprint(client.initNewAudioTest(eval(args[0]),))
+
+elif cmd == 'getQuestionInfo':
+    if len(args) != 1:
+        print('getQuestionInfo requires 1 args')
+        sys.exit(1)
+    pp.pprint(client.getQuestionInfo(eval(args[0]),))
+
+elif cmd == 'getExamReport':
     if len(args) != 1:
         print('getExamReport requires 1 args')
         sys.exit(1)

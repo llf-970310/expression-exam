@@ -1,10 +1,13 @@
+import logging
+
 from mongoengine import ValidationError
 
 import util
+from config import ExamConfig
 from errors import *
 from manager import exam_manager, report_manager
 from exam.ttypes import *
-from model.exam import HistoryTestModel, CurrentTestModel
+from model.exam import HistoryTestModel, CurrentTestModel, WavPretestModel
 
 
 def get_exam_report(exam_id) -> (ExamReport, ExamScore):
@@ -98,3 +101,22 @@ def get_exam_record(user_id: str, template_id: str) -> list:
             pass
 
     return exam_list
+
+
+def init_new_audio_test(user_id: str) -> QuestionInfo:
+    wav_test = WavPretestModel()
+    wav_test['text'] = ExamConfig.audio_test["content"]
+    wav_test['user_id'] = user_id
+    wav_test.save()
+
+    return QuestionInfo(
+        id=str(wav_test.id),
+        content=wav_test['text'],
+        type=0,
+        readLimitTime=ExamConfig.question_prepare_time[0],
+        answerLimitTime=ExamConfig.question_limit_time[0],
+        questionTip={
+            "detail": ExamConfig.audio_test['detail'],
+            "tip": ExamConfig.audio_test['tip'],
+        }
+    )
