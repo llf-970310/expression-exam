@@ -1,3 +1,4 @@
+import datetime
 import logging
 
 from mongoengine import ValidationError
@@ -120,3 +121,36 @@ def init_new_audio_test(user_id: str) -> QuestionInfo:
             "tip": ExamConfig.audio_test['tip'],
         }
     )
+
+
+def get_question_info(exam_id: str, question_num: int) -> QuestionInfo:
+    # get test
+    test = CurrentTestModel.objects(id=exam_id).first()
+    if test is None:
+        raise ExamNotExist
+
+    # 如果超出最大题号
+    if question_num > len(test.questions):
+        raise ExamFinished
+
+    question = test.questions[str(question_num)]
+
+    result = QuestionInfo(
+        id=question.q_id,
+        content=question.q_text,
+        type=question.q_type,
+        readLimitTime=ExamConfig.question_prepare_time[question.q_type],
+        answerLimitTime=ExamConfig.question_limit_time[question.q_type],
+        questionTip=ExamConfig.question_type_tip[question.q_type],
+        questionNum=question_num,
+        isLastQuestion=(question_num == len(test.questions)),
+        examTime=(test.test_expire_time - test.test_start_time).seconds,
+        examLeftTime=(test.test_expire_time - datetime.datetime.utcnow()).total_seconds()
+    )
+
+    # update and save
+    question.status = 'question_fetched'
+    test.current_q_num = question_num
+    test.save()
+
+    return result

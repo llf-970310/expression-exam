@@ -77,3 +77,22 @@ def init_new_audio_test(request: InitNewAudioTestRequest) -> InitNewAudioTestRes
         fill_status_of_resp(resp, e)
 
     return resp
+
+
+def get_question_info(request: GetQuestionInfoRequest) -> GetQuestionInfoResponse:
+    resp = GetQuestionInfoResponse()
+    exam_id = request.examId
+    question_num = request.questionNum
+
+    if not exam_id or question_num <= 0:
+        fill_status_of_resp(resp, InvalidParam())
+        return resp
+
+    try:
+        question_info = service.get_question_info(exam_id, question_num)
+        resp.question = question_info
+        fill_status_of_resp(resp)
+    except ErrorWithCode as e:
+        fill_status_of_resp(resp, e)
+
+    return resp

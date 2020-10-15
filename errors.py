@@ -20,6 +20,11 @@ class ExamNotExist(ErrorWithCode):
         ErrorWithCode.__init__(self, 4001, "测试不存在")
 
 
+class ExamFinished(ErrorWithCode):
+    def __init__(self):
+        ErrorWithCode.__init__(self, 5100, "测试已完成")
+
+
 class InProcessing(ErrorWithCode):
     def __init__(self):
         ErrorWithCode.__init__(self, 5104, "正在处理")
