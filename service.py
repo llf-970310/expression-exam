@@ -191,3 +191,13 @@ def get_file_upload_path(exam_id: str, user_id: str, question_num: int = None) -
     logging.info("[get_file_upload_path] exam_id: %s, upload_path: %s, user_id: %s" % (exam_id, upload_path, user_id))
 
     return upload_path
+
+
+def init_new_exam(user_id: str, template_id: str) -> str:
+    exam_id = exam_manager.init_paper(user_id, template_id)
+    logging.debug('[init_new_exam] user_id: %s, exam_id: %s' % (user_id, exam_id))
+    if not exam_id:
+        logging.error('[init_new_exam] init new exam failed. user_id: %s, tpl_id: %s' % (user_id, template_id))
+        raise InitExamFailed
+
+    return exam_id

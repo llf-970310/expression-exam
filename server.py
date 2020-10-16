@@ -33,6 +33,9 @@ class ExamServiceHandler:
     def getFileUploadPath(self, request: GetFileUploadPathRequest) -> GetFileUploadPathResponse:
         return handler.get_file_upload_path(request)
 
+    def initNewExam(self, request: InitNewExamRequest) -> InitNewExamResponse:
+        return handler.init_new_exam(request)
+
 
 if __name__ == '__main__':
     # init mongo

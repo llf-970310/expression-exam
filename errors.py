@@ -25,6 +25,11 @@ class ExamFinished(ErrorWithCode):
         ErrorWithCode.__init__(self, 5100, "测试已完成")
 
 
+class InitExamFailed(ErrorWithCode):
+    def __init__(self):
+        ErrorWithCode.__init__(self, 5101, "题目生成失败")
+
+
 class GetQuestionFailed(ErrorWithCode):
     def __init__(self):
         ErrorWithCode.__init__(self, 5102, "获取题目信息失败")
@@ -33,6 +38,11 @@ class GetQuestionFailed(ErrorWithCode):
 class InProcessing(ErrorWithCode):
     def __init__(self):
         ErrorWithCode.__init__(self, 5104, "正在处理")
+
+
+class InternalError(ErrorWithCode):
+    def __init__(self):
+        ErrorWithCode.__init__(self, 6000, "服务内部错误")
 
 
 def fill_status_of_resp(resp, error: ErrorWithCode = None):

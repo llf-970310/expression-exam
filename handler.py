@@ -123,3 +123,22 @@ def get_file_upload_path(request: GetFileUploadPathRequest) -> GetFileUploadPath
         fill_status_of_resp(resp, e)
 
     return resp
+
+
+def init_new_exam(request: InitNewExamRequest) -> InitNewExamResponse:
+    resp = InitNewExamResponse()
+    user_id = request.userId
+    template_id = request.templateId
+
+    if not user_id or not template_id:
+        fill_status_of_resp(resp, InvalidParam())
+        return resp
+
+    try:
+        exam_id = service.init_new_exam(user_id, template_id)
+        resp.examId = exam_id
+        fill_status_of_resp(resp)
+    except ErrorWithCode as e:
+        fill_status_of_resp(resp, e)
+
+    return resp

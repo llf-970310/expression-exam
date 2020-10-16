@@ -25,6 +25,7 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
     print('')
     print('Functions:')
     print('  InitNewAudioTestResponse initNewAudioTest(InitNewAudioTestRequest request)')
+    print('  InitNewExamResponse initNewExam(InitNewExamRequest request)')
     print('  GetQuestionInfoResponse getQuestionInfo(GetQuestionInfoRequest request)')
     print('  GetFileUploadPathResponse getFileUploadPath(GetFileUploadPathRequest request)')
     print('  GetExamReportResponse getExamReport(GetExamReportRequest request)')
@@ -114,6 +115,12 @@ if cmd == 'initNewAudioTest':
         print('initNewAudioTest requires 1 args')
         sys.exit(1)
     pp.pprint(client.initNewAudioTest(eval(args[0]),))
+
+elif cmd == 'initNewExam':
+    if len(args) != 1:
+        print('initNewExam requires 1 args')
+        sys.exit(1)
+    pp.pprint(client.initNewExam(eval(args[0]),))
 
 elif cmd == 'getQuestionInfo':
     if len(args) != 1:
