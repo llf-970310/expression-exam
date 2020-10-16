@@ -96,3 +96,30 @@ def get_question_info(request: GetQuestionInfoRequest) -> GetQuestionInfoRespons
         fill_status_of_resp(resp, e)
 
     return resp
+
+
+def get_file_upload_path(request: GetFileUploadPathRequest) -> GetFileUploadPathResponse:
+    resp = GetFileUploadPathResponse()
+    exam_id = request.examId
+    user_id = request.userId
+    exam_type = request.type
+
+    if not exam_id or not user_id:
+        fill_status_of_resp(resp, InvalidParam())
+        return resp
+
+    try:
+        if exam_type == ExamType.AudioTest:
+            upload_path = service.get_file_upload_path(exam_id, user_id)
+        elif exam_type == ExamType.RealExam:
+            upload_path = service.get_file_upload_path(exam_id, user_id, request.questionNum)
+        else:
+            fill_status_of_resp(resp, InvalidParam())
+            return resp
+
+        resp.path = upload_path
+        fill_status_of_resp(resp)
+    except ErrorWithCode as e:
+        fill_status_of_resp(resp, e)
+
+    return resp

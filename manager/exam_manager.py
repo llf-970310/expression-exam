@@ -1,7 +1,11 @@
 import logging
+import random
+import time
+from enum import unique, Enum
 
-from config import ReportConfig
-from exam.ttypes import ExamScore
+import util
+from config import ReportConfig, ExamConfig
+from exam.ttypes import ExamScore, ExamType
 from model.exam import CurrentTestModel, HistoryTestModel
 
 
@@ -106,3 +110,18 @@ def compute_exam_score(question_score_dict: dict, question_type_list: list) -> d
     logging.info("[compute_exam_score] score_result: %r" % result)
 
     return result
+
+
+# 生成文件上传路径
+def generate_upload_path(exam_type: ExamType, user_id: str) -> str:
+    # upload file path: 相对目录(audio)/日期/用户id/时间戳+后缀(.wav)
+    file_dir = ""
+    if exam_type == ExamType.AudioTest:
+        file_dir = '/'.join((ExamConfig.audio_test_basedir, util.get_server_date_str('-'), user_id))
+    elif exam_type == ExamType.RealExam:
+        file_dir = '/'.join((ExamConfig.audio_save_basedir, util.get_server_date_str('-'), user_id))
+
+    _temp_str = "%sr%s" % (int(time.time()), random.randint(100, 1000))
+    file_name = "%s%s" % (_temp_str, ExamConfig.audio_extension)
+
+    return file_dir + '/' + file_name

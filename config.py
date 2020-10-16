@@ -54,6 +54,12 @@ class ExamConfig:
             "tip": "你有2分钟的时间准备，并有2分钟时间复述"}
     }
 
+    # question config
     question_limit_time = {0: 15, 1: 60, 2: 30, 3: 120, 4: 0, 5: 60, 6: 120, 7: 120}
     question_prepare_time = {0: 5, 1: 5, 2: 60, 3: 60, 4: 0, 5: 120, 6: 240, 7: 120}
     detect_left_exam = True  # 是否断点续作
+
+    # storage config
+    audio_save_basedir = 'audio'
+    audio_test_basedir = 'audio/test'
+    audio_extension = '.wav'

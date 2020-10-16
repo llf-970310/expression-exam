@@ -30,6 +30,9 @@ class ExamServiceHandler:
     def getQuestionInfo(self, request: GetQuestionInfoRequest) -> GetQuestionInfoResponse:
         return handler.get_question_info(request)
 
+    def getFileUploadPath(self, request: GetFileUploadPathRequest) -> GetFileUploadPathResponse:
+        return handler.get_file_upload_path(request)
+
 
 if __name__ == '__main__':
     # init mongo

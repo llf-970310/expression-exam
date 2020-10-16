@@ -1,5 +1,7 @@
 import datetime
 import logging
+import random
+import time
 
 from mongoengine import ValidationError
 
@@ -8,6 +10,7 @@ from config import ExamConfig
 from errors import *
 from manager import exam_manager, report_manager
 from exam.ttypes import *
+from manager.exam_manager import ExamType
 from model.exam import HistoryTestModel, CurrentTestModel, WavPretestModel
 
 
@@ -154,3 +157,37 @@ def get_question_info(exam_id: str, question_num: int) -> QuestionInfo:
     test.save()
 
     return result
+
+
+def get_file_upload_path(exam_id: str, user_id: str, question_num: int = None) -> str:
+    if question_num:  # real_exam
+        exam = CurrentTestModel.objects(id=exam_id).first()
+    else:  # audio_test
+        exam = WavPretestModel.objects(id=exam_id).first()
+
+    if not exam:
+        logging.error("[get_file_upload_path] no such test! test id: %s" % exam_id)
+        raise ExamNotExist
+
+    if question_num:
+        try:
+            question = exam.questions[str(question_num)]
+        except Exception as e:
+            logging.error("[get_file_upload_path] GetEmbeddedQuestionException. question_num: "
+                          "%s, exam_id: %s. exception:\n%s" % (question_num, exam_id, repr(e)))
+            raise GetQuestionFailed
+
+        upload_path = question.wav_upload_url if question.wav_upload_url \
+            else exam_manager.generate_upload_path(ExamType.RealExam, user_id)
+        question.wav_upload_url = upload_path
+        question.file_location = 'BOS'
+        question.status = 'url_fetched'
+    else:
+        upload_path = exam_manager.generate_upload_path(ExamType.AudioTest, user_id)
+        exam.wav_upload_url = upload_path
+        exam.file_location = 'BOS'
+
+    exam.save()
+    logging.info("[get_file_upload_path] exam_id: %s, upload_path: %s, user_id: %s" % (exam_id, upload_path, user_id))
+
+    return upload_path

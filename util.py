@@ -1,3 +1,4 @@
+import time
 from datetime import timedelta
 
 
@@ -23,3 +24,10 @@ def datetime_to_str(dt, date_separator='-', only_date=False) -> str:
         return dt.strftime("%%Y%s%%m%s%%d" % (date_separator, date_separator))
     else:
         return dt.strftime("%%Y%s%%m%s%%d %%H:%%M:%%S" % (date_separator, date_separator))
+
+
+def get_server_date_str(separator='') -> str:
+    """
+    Desc:   获得当前日期格式化字符串，可指定分隔符，如: 20181009(默认), 2018-10-31(输入为-), 2018===10===31(输入为===)
+    """
+    return time.strftime("%%Y%s%%m%s%%d" % (separator, separator), time.localtime(time.time()))

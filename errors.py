@@ -25,6 +25,11 @@ class ExamFinished(ErrorWithCode):
         ErrorWithCode.__init__(self, 5100, "测试已完成")
 
 
+class GetQuestionFailed(ErrorWithCode):
+    def __init__(self):
+        ErrorWithCode.__init__(self, 5102, "获取题目信息失败")
+
+
 class InProcessing(ErrorWithCode):
     def __init__(self):
         ErrorWithCode.__init__(self, 5104, "正在处理")

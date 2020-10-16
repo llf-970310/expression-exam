@@ -16,6 +16,21 @@ from thrift.transport import TTransport
 all_structs = []
 
 
+class ExamType(object):
+    AudioTest = 1
+    RealExam = 2
+
+    _VALUES_TO_NAMES = {
+        1: "AudioTest",
+        2: "RealExam",
+    }
+
+    _NAMES_TO_VALUES = {
+        "AudioTest": 1,
+        "RealExam": 2,
+    }
+
+
 class ExamScore(object):
     """
     Attributes:
@@ -1314,6 +1329,187 @@ class GetQuestionInfoResponse(object):
 
     def __ne__(self, other):
         return not (self == other)
+
+
+class GetFileUploadPathRequest(object):
+    """
+    Attributes:
+     - examId
+     - userId
+     - type
+     - questionNum
+
+    """
+
+
+    def __init__(self, examId=None, userId=None, type=None, questionNum=None,):
+        self.examId = examId
+        self.userId = userId
+        self.type = type
+        self.questionNum = questionNum
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRING:
+                    self.examId = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.STRING:
+                    self.userId = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 3:
+                if ftype == TType.I32:
+                    self.type = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 4:
+                if ftype == TType.I32:
+                    self.questionNum = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('GetFileUploadPathRequest')
+        if self.examId is not None:
+            oprot.writeFieldBegin('examId', TType.STRING, 1)
+            oprot.writeString(self.examId.encode('utf-8') if sys.version_info[0] == 2 else self.examId)
+            oprot.writeFieldEnd()
+        if self.userId is not None:
+            oprot.writeFieldBegin('userId', TType.STRING, 2)
+            oprot.writeString(self.userId.encode('utf-8') if sys.version_info[0] == 2 else self.userId)
+            oprot.writeFieldEnd()
+        if self.type is not None:
+            oprot.writeFieldBegin('type', TType.I32, 3)
+            oprot.writeI32(self.type)
+            oprot.writeFieldEnd()
+        if self.questionNum is not None:
+            oprot.writeFieldBegin('questionNum', TType.I32, 4)
+            oprot.writeI32(self.questionNum)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        if self.examId is None:
+            raise TProtocolException(message='Required field examId is unset!')
+        if self.userId is None:
+            raise TProtocolException(message='Required field userId is unset!')
+        if self.type is None:
+            raise TProtocolException(message='Required field type is unset!')
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+
+
+class GetFileUploadPathResponse(object):
+    """
+    Attributes:
+     - path
+     - statusCode
+     - statusMsg
+
+    """
+
+
+    def __init__(self, path=None, statusCode=None, statusMsg=None,):
+        self.path = path
+        self.statusCode = statusCode
+        self.statusMsg = statusMsg
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRING:
+                    self.path = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 3:
+                if ftype == TType.I32:
+                    self.statusCode = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 4:
+                if ftype == TType.STRING:
+                    self.statusMsg = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('GetFileUploadPathResponse')
+        if self.path is not None:
+            oprot.writeFieldBegin('path', TType.STRING, 1)
+            oprot.writeString(self.path.encode('utf-8') if sys.version_info[0] == 2 else self.path)
+            oprot.writeFieldEnd()
+        if self.statusCode is not None:
+            oprot.writeFieldBegin('statusCode', TType.I32, 3)
+            oprot.writeI32(self.statusCode)
+            oprot.writeFieldEnd()
+        if self.statusMsg is not None:
+            oprot.writeFieldBegin('statusMsg', TType.STRING, 4)
+            oprot.writeString(self.statusMsg.encode('utf-8') if sys.version_info[0] == 2 else self.statusMsg)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        if self.path is None:
+            raise TProtocolException(message='Required field path is unset!')
+        if self.statusCode is None:
+            raise TProtocolException(message='Required field statusCode is unset!')
+        if self.statusMsg is None:
+            raise TProtocolException(message='Required field statusMsg is unset!')
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
 all_structs.append(ExamScore)
 ExamScore.thrift_spec = (
     None,  # 0
@@ -1418,6 +1614,22 @@ all_structs.append(GetQuestionInfoResponse)
 GetQuestionInfoResponse.thrift_spec = (
     None,  # 0
     (1, TType.STRUCT, 'question', [QuestionInfo, None], None, ),  # 1
+    None,  # 2
+    (3, TType.I32, 'statusCode', None, None, ),  # 3
+    (4, TType.STRING, 'statusMsg', 'UTF8', None, ),  # 4
+)
+all_structs.append(GetFileUploadPathRequest)
+GetFileUploadPathRequest.thrift_spec = (
+    None,  # 0
+    (1, TType.STRING, 'examId', 'UTF8', None, ),  # 1
+    (2, TType.STRING, 'userId', 'UTF8', None, ),  # 2
+    (3, TType.I32, 'type', None, None, ),  # 3
+    (4, TType.I32, 'questionNum', None, None, ),  # 4
+)
+all_structs.append(GetFileUploadPathResponse)
+GetFileUploadPathResponse.thrift_spec = (
+    None,  # 0
+    (1, TType.STRING, 'path', 'UTF8', None, ),  # 1
     None,  # 2
     (3, TType.I32, 'statusCode', None, None, ),  # 3
     (4, TType.STRING, 'statusMsg', 'UTF8', None, ),  # 4
