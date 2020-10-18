@@ -9,12 +9,11 @@ from config import ReportConfig, ExamConfig
 from errors import InternalError
 from exam.ttypes import ExamScore, ExamType
 from model.exam import CurrentTestModel, HistoryTestModel, CurrentQuestionEmbed
-
-# 先从 current 中找，current 不存在到 history 中找
 from model.paper_template import PaperTemplate
 from model.question import QuestionModel
 
 
+# 先从 current 中找，current 不存在到 history 中找
 def get_exam_by_id(test_id):
     test = CurrentTestModel.objects(id=test_id).first()
     if test is None:

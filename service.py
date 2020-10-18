@@ -12,6 +12,7 @@ from manager import exam_manager, report_manager
 from exam.ttypes import *
 from manager.exam_manager import ExamType
 from model.exam import HistoryTestModel, CurrentTestModel, WavPretestModel
+from model.paper_template import PaperTemplate
 
 
 def get_exam_report(exam_id) -> (ExamReport, ExamScore):
@@ -201,3 +202,25 @@ def init_new_exam(user_id: str, template_id: str) -> str:
         raise InitExamFailed
 
     return exam_id
+
+
+def get_paper_template(template_id: str) -> list:
+    if template_id is None:
+        all_templates = PaperTemplate.objects(deprecated=False)
+        tpl_lst = []
+        for tpl in all_templates:
+            d = ExamTemplate(
+                id=str(tpl.id),
+                name=tpl.name,
+                description=tpl.desc,
+                questionCount=len(tpl.questions)
+            )
+            tpl_lst.append(d)
+        return tpl_lst
+    else:
+        template_item = PaperTemplate.objects(id=template_id).first()
+        tmp = ExamTemplate(
+            id=str(template_item.id), name=template_item.name,
+            description=template_item.desc, questionCount=len(template_item.questions)
+        )
+        return [tmp]

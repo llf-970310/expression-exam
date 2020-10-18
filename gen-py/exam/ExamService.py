@@ -35,6 +35,14 @@ class Iface(object):
         """
         pass
 
+    def getPaperTemplate(self, request):
+        """
+        Parameters:
+         - request
+
+        """
+        pass
+
     def getQuestionInfo(self, request):
         """
         Parameters:
@@ -146,6 +154,38 @@ class Client(Iface):
         if result.success is not None:
             return result.success
         raise TApplicationException(TApplicationException.MISSING_RESULT, "initNewExam failed: unknown result")
+
+    def getPaperTemplate(self, request):
+        """
+        Parameters:
+         - request
+
+        """
+        self.send_getPaperTemplate(request)
+        return self.recv_getPaperTemplate()
+
+    def send_getPaperTemplate(self, request):
+        self._oprot.writeMessageBegin('getPaperTemplate', TMessageType.CALL, self._seqid)
+        args = getPaperTemplate_args()
+        args.request = request
+        args.write(self._oprot)
+        self._oprot.writeMessageEnd()
+        self._oprot.trans.flush()
+
+    def recv_getPaperTemplate(self):
+        iprot = self._iprot
+        (fname, mtype, rseqid) = iprot.readMessageBegin()
+        if mtype == TMessageType.EXCEPTION:
+            x = TApplicationException()
+            x.read(iprot)
+            iprot.readMessageEnd()
+            raise x
+        result = getPaperTemplate_result()
+        result.read(iprot)
+        iprot.readMessageEnd()
+        if result.success is not None:
+            return result.success
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "getPaperTemplate failed: unknown result")
 
     def getQuestionInfo(self, request):
         """
@@ -314,6 +354,7 @@ class Processor(Iface, TProcessor):
         self._processMap = {}
         self._processMap["initNewAudioTest"] = Processor.process_initNewAudioTest
         self._processMap["initNewExam"] = Processor.process_initNewExam
+        self._processMap["getPaperTemplate"] = Processor.process_getPaperTemplate
         self._processMap["getQuestionInfo"] = Processor.process_getQuestionInfo
         self._processMap["getFileUploadPath"] = Processor.process_getFileUploadPath
         self._processMap["getExamReport"] = Processor.process_getExamReport
@@ -383,6 +424,29 @@ class Processor(Iface, TProcessor):
             msg_type = TMessageType.EXCEPTION
             result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
         oprot.writeMessageBegin("initNewExam", msg_type, seqid)
+        result.write(oprot)
+        oprot.writeMessageEnd()
+        oprot.trans.flush()
+
+    def process_getPaperTemplate(self, seqid, iprot, oprot):
+        args = getPaperTemplate_args()
+        args.read(iprot)
+        iprot.readMessageEnd()
+        result = getPaperTemplate_result()
+        try:
+            result.success = self._handler.getPaperTemplate(args.request)
+            msg_type = TMessageType.REPLY
+        except TTransport.TTransportException:
+            raise
+        except TApplicationException as ex:
+            logging.exception('TApplication exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = ex
+        except Exception:
+            logging.exception('Unexpected exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
+        oprot.writeMessageBegin("getPaperTemplate", msg_type, seqid)
         result.write(oprot)
         oprot.writeMessageEnd()
         oprot.trans.flush()
@@ -752,6 +816,131 @@ class initNewExam_result(object):
 all_structs.append(initNewExam_result)
 initNewExam_result.thrift_spec = (
     (0, TType.STRUCT, 'success', [InitNewExamResponse, None], None, ),  # 0
+)
+
+
+class getPaperTemplate_args(object):
+    """
+    Attributes:
+     - request
+
+    """
+
+
+    def __init__(self, request=None,):
+        self.request = request
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRUCT:
+                    self.request = GetPaperTemplateRequest()
+                    self.request.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('getPaperTemplate_args')
+        if self.request is not None:
+            oprot.writeFieldBegin('request', TType.STRUCT, 1)
+            self.request.write(oprot)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(getPaperTemplate_args)
+getPaperTemplate_args.thrift_spec = (
+    None,  # 0
+    (1, TType.STRUCT, 'request', [GetPaperTemplateRequest, None], None, ),  # 1
+)
+
+
+class getPaperTemplate_result(object):
+    """
+    Attributes:
+     - success
+
+    """
+
+
+    def __init__(self, success=None,):
+        self.success = success
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 0:
+                if ftype == TType.STRUCT:
+                    self.success = GetPaperTemplateResponse()
+                    self.success.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('getPaperTemplate_result')
+        if self.success is not None:
+            oprot.writeFieldBegin('success', TType.STRUCT, 0)
+            self.success.write(oprot)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(getPaperTemplate_result)
+getPaperTemplate_result.thrift_spec = (
+    (0, TType.STRUCT, 'success', [GetPaperTemplateResponse, None], None, ),  # 0
 )
 
 

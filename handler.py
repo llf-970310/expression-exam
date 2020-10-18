@@ -142,3 +142,17 @@ def init_new_exam(request: InitNewExamRequest) -> InitNewExamResponse:
         fill_status_of_resp(resp, e)
 
     return resp
+
+
+def get_paper_template(request: GetPaperTemplateRequest) -> GetPaperTemplateResponse:
+    resp = GetPaperTemplateResponse()
+    template_id = request.templateId
+
+    try:
+        template_list = service.get_paper_template(template_id)
+        resp.templateList = template_list
+        fill_status_of_resp(resp)
+    except ErrorWithCode as e:
+        fill_status_of_resp(resp, e)
+
+    return resp
