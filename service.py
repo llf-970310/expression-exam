@@ -3,6 +3,7 @@ import logging
 import random
 import time
 
+import Levenshtein
 from mongoengine import ValidationError
 
 import util
@@ -224,3 +225,53 @@ def get_paper_template(template_id: str) -> list:
             description=template_item.desc, questionCount=len(template_item.questions)
         )
         return [tmp]
+
+
+def get_audio_test_result(exam_id: str) -> (bool, float):
+    audio_test = WavPretestModel.objects(id=exam_id).first()
+    if audio_test is None:
+        raise ExamNotExist
+    status = audio_test['result']['status']
+    if status == 'handling':
+        raise InProcessing
+    elif status == 'finished':
+        rcg_text = audio_test['result']['feature']['rcg_text']
+        lev_ratio = Levenshtein.ratio(rcg_text, audio_test['text'])
+        return True, lev_ratio
+    else:
+        return False, 0
+
+
+def get_exam_result(exam_id: str) -> (ExamScore, ExamReport):
+    try:
+        test = exam_manager.get_exam_by_id(exam_id)
+        if test is None:
+            raise ExamNotExist
+    except ValidationError:
+        raise InvalidParam
+
+    questions = test['questions']
+    handling, score, feature = exam_manager.get_score_and_feature(questions)
+
+    # 判断该测试是否已经超时
+    is_exam_expire = datetime.datetime.utcnow() > test.test_expire_time
+    logging.info("[get_exam_result] is_exam_expire: %s, exam_id: %s" % (str(is_exam_expire), exam_id))
+
+    # 如果回答完问题或超时但已处理完，则计算得分，否则返回正在处理
+    if (len(score) == len(questions)) or (is_exam_expire and not handling):
+        if not test['score_info']:
+            logging.info("[get_exam_result] first compute score. exam_id: %s" % exam_id)
+            test['score_info'] = exam_manager.compute_exam_score(score, test.paper_type)
+            test.save()
+        else:
+            logging.info("[get_exam_result] use computed score. exam_id: %s" % exam_id)
+
+        exam_score = ExamScore(
+            total=test['score_info']['total'], quality=test['score_info']['音质'], key=test['score_info']['主旨'],
+            detail=test['score_info']['细节'], structure=test['score_info']['结构'], logic=test['score_info']['逻辑']
+        )
+        exam_report = report_manager.generate_report(feature, score, test.paper_type)
+
+        return exam_score, exam_report
+    else:
+        return InProcessing

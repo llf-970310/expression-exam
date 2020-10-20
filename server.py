@@ -39,6 +39,12 @@ class ExamServiceHandler:
     def getPaperTemplate(self, request: GetPaperTemplateRequest) -> GetPaperTemplateResponse:
         return handler.get_paper_template(request)
 
+    def getAudioTestResult(self, request: GetAudioTestResultRequest) -> GetAudioTestResultResponse:
+        return handler.get_audio_test_result(request)
+
+    def getExamResult(self, request: GetExamResultRequest) -> GetExamResultResponse:
+        return handler.get_exam_result(request)
+
 
 if __name__ == '__main__':
     # init mongo

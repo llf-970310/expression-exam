@@ -29,6 +29,8 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
     print('  GetPaperTemplateResponse getPaperTemplate(GetPaperTemplateRequest request)')
     print('  GetQuestionInfoResponse getQuestionInfo(GetQuestionInfoRequest request)')
     print('  GetFileUploadPathResponse getFileUploadPath(GetFileUploadPathRequest request)')
+    print('  GetAudioTestResultResponse getAudioTestResult(GetAudioTestResultRequest request)')
+    print('  GetExamResultResponse getExamResult(GetExamResultRequest request)')
     print('  GetExamReportResponse getExamReport(GetExamReportRequest request)')
     print('  ComputeExamScoreResponse computeExamScore(ComputeExamScoreRequest request)')
     print('  GetExamRecordResponse getExamRecord(GetExamRecordRequest request)')
@@ -140,6 +142,18 @@ elif cmd == 'getFileUploadPath':
         print('getFileUploadPath requires 1 args')
         sys.exit(1)
     pp.pprint(client.getFileUploadPath(eval(args[0]),))
+
+elif cmd == 'getAudioTestResult':
+    if len(args) != 1:
+        print('getAudioTestResult requires 1 args')
+        sys.exit(1)
+    pp.pprint(client.getAudioTestResult(eval(args[0]),))
+
+elif cmd == 'getExamResult':
+    if len(args) != 1:
+        print('getExamResult requires 1 args')
+        sys.exit(1)
+    pp.pprint(client.getExamResult(eval(args[0]),))
 
 elif cmd == 'getExamReport':
     if len(args) != 1:

@@ -156,3 +156,41 @@ def get_paper_template(request: GetPaperTemplateRequest) -> GetPaperTemplateResp
         fill_status_of_resp(resp, e)
 
     return resp
+
+
+def get_audio_test_result(request: GetAudioTestResultRequest) -> GetAudioTestResultResponse:
+    resp = GetAudioTestResultResponse()
+    exam_id = request.examId
+
+    if not exam_id:
+        fill_status_of_resp(resp, InvalidParam())
+        return resp
+
+    try:
+        can_recognize, lev_ratio = service.get_audio_test_result(exam_id)
+        resp.canRecognize = can_recognize
+        resp.levenshteinRatio = lev_ratio
+        fill_status_of_resp(resp)
+    except ErrorWithCode as e:
+        fill_status_of_resp(resp, e)
+
+    return resp
+
+
+def get_exam_result(request: GetExamResultRequest) -> GetExamResultResponse:
+    resp = GetExamResultResponse()
+    exam_id = request.examId
+
+    if not exam_id:
+        fill_status_of_resp(resp, InvalidParam())
+        return resp
+
+    try:
+        score, report = service.get_exam_result(exam_id)
+        resp.report = report
+        resp.score = score
+        fill_status_of_resp(resp)
+    except ErrorWithCode as e:
+        fill_status_of_resp(resp, e)
+
+    return resp
