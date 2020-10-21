@@ -49,27 +49,7 @@ def compute_exam_score(exam_id) -> ExamScore:
     except ValidationError:
         raise InvalidParam
 
-    if test["score_info"]:  # 数据库有成绩信息 => 直接返回
-        score = ExamScore(
-            total=test['score_info']['total'], quality=test['score_info']['音质'], key=test['score_info']['主旨'],
-            detail=test['score_info']['细节'], structure=test['score_info']['结构'], logic=test['score_info']['逻辑']
-        )
-    elif isinstance(test, HistoryTestModel):  # 没成绩信息，但是 history test => 返回 0
-        score = ExamScore(total=0, quality=0, key=0, detail=0, structure=0, logic=0)
-    elif exam_manager.question_all_finished(test["questions"]):  # 没成绩信息，是 current test，题目全部结束 => 计算成绩
-        tmp_dict = {}
-        for k, v in test["questions"].items():
-            tmp_dict[int(k)] = v['score']
-        test['score_info'] = exam_manager.compute_exam_score(tmp_dict, test.paper_type)
-        test.save()
-
-        score = ExamScore(
-            total=test['score_info']['total'], quality=test['score_info']['音质'], key=test['score_info']['主旨'],
-            detail=test['score_info']['细节'], structure=test['score_info']['结构'], logic=test['score_info']['逻辑']
-        )
-    else:  # 没成绩信息，是 current test，还有题目在处理中 => 抛出异常
-        raise InProcessing
-
+    score = exam_manager.get_exam_score(test)
     return score
 
 
@@ -90,7 +70,7 @@ def get_exam_record(user_id: str, template_id: str) -> list:
                 examStartTime=util.datetime_to_str(history["test_start_time"]),
                 templateId=history["paper_tpl_id"],
                 examId=history["current_id"],
-                scoreInfo=compute_exam_score(history["current_id"])
+                scoreInfo=exam_manager.get_exam_score(history)
             ))
         except InProcessing:
             pass
@@ -101,7 +81,7 @@ def get_exam_record(user_id: str, template_id: str) -> list:
                 examStartTime=util.datetime_to_str(current["test_start_time"]),
                 templateId=current["paper_tpl_id"],
                 examId=str(current["id"]),
-                scoreInfo=compute_exam_score(str(current["id"]))
+                scoreInfo=exam_manager.get_exam_score(current)
             ))
         except InProcessing:
             pass
