@@ -5,8 +5,10 @@ import jwt
 from exam.ttypes import *
 import service
 from errors import *
+from util import func_log
 
 
+@func_log
 def get_exam_report(request: GetExamReportRequest) -> GetExamReportResponse:
     resp = GetExamReportResponse()
     exam_id = request.examId
@@ -25,6 +27,7 @@ def get_exam_report(request: GetExamReportRequest) -> GetExamReportResponse:
     return resp
 
 
+@func_log
 def compute_exam_score(request: ComputeExamScoreRequest) -> ComputeExamScoreResponse:
     resp = ComputeExamScoreResponse()
     exam_id = request.examId
@@ -42,6 +45,7 @@ def compute_exam_score(request: ComputeExamScoreRequest) -> ComputeExamScoreResp
     return resp
 
 
+@func_log
 def get_exam_record(request: GetExamRecordRequest) -> GetExamRecordResponse:
     resp = GetExamRecordResponse()
     user_id = request.userId
@@ -61,6 +65,7 @@ def get_exam_record(request: GetExamRecordRequest) -> GetExamRecordResponse:
     return resp
 
 
+@func_log
 def init_new_audio_test(request: InitNewAudioTestRequest) -> InitNewAudioTestResponse:
     resp = InitNewAudioTestResponse()
     user_id = request.userId
@@ -79,6 +84,7 @@ def init_new_audio_test(request: InitNewAudioTestRequest) -> InitNewAudioTestRes
     return resp
 
 
+@func_log
 def get_question_info(request: GetQuestionInfoRequest) -> GetQuestionInfoResponse:
     resp = GetQuestionInfoResponse()
     exam_id = request.examId
@@ -98,6 +104,7 @@ def get_question_info(request: GetQuestionInfoRequest) -> GetQuestionInfoRespons
     return resp
 
 
+@func_log
 def get_file_upload_path(request: GetFileUploadPathRequest) -> GetFileUploadPathResponse:
     resp = GetFileUploadPathResponse()
     exam_id = request.examId
@@ -125,6 +132,7 @@ def get_file_upload_path(request: GetFileUploadPathRequest) -> GetFileUploadPath
     return resp
 
 
+@func_log
 def init_new_exam(request: InitNewExamRequest) -> InitNewExamResponse:
     resp = InitNewExamResponse()
     user_id = request.userId
@@ -144,6 +152,7 @@ def init_new_exam(request: InitNewExamRequest) -> InitNewExamResponse:
     return resp
 
 
+@func_log
 def get_paper_template(request: GetPaperTemplateRequest) -> GetPaperTemplateResponse:
     resp = GetPaperTemplateResponse()
     template_id = request.templateId
@@ -158,6 +167,7 @@ def get_paper_template(request: GetPaperTemplateRequest) -> GetPaperTemplateResp
     return resp
 
 
+@func_log
 def get_audio_test_result(request: GetAudioTestResultRequest) -> GetAudioTestResultResponse:
     resp = GetAudioTestResultResponse()
     exam_id = request.examId
@@ -177,6 +187,7 @@ def get_audio_test_result(request: GetAudioTestResultRequest) -> GetAudioTestRes
     return resp
 
 
+@func_log
 def get_exam_result(request: GetExamResultRequest) -> GetExamResultResponse:
     resp = GetExamResultResponse()
     exam_id = request.examId
