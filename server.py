@@ -1,3 +1,10 @@
+import os
+import sys
+
+project_folder = os.path.abspath(__file__).split('/server.py')[0]
+sys.path.append(os.path.join(project_folder, 'expression'))
+sys.path.append(os.path.join(project_folder, 'gen-py'))
+
 import logging
 
 import mongoengine
