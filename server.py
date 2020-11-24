@@ -46,6 +46,7 @@ class ExamServiceHandler:
     def getPaperTemplate(self, request: GetPaperTemplateRequest) -> GetPaperTemplateResponse:
         return handler.get_paper_template(request)
 
+    @DeprecationWarning
     def getAudioTestResult(self, request: GetAudioTestResultRequest) -> GetAudioTestResultResponse:
         return handler.get_audio_test_result(request)
 

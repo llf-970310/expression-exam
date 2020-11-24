@@ -536,8 +536,6 @@ class QuestionInfo(object):
         oprot.writeStructEnd()
 
     def validate(self):
-        if self.id is None:
-            raise TProtocolException(message='Required field id is unset!')
         if self.content is None:
             raise TProtocolException(message='Required field content is unset!')
         if self.type is None:
@@ -1662,8 +1660,6 @@ class GetFileUploadPathRequest(object):
         oprot.writeStructEnd()
 
     def validate(self):
-        if self.examId is None:
-            raise TProtocolException(message='Required field examId is unset!')
         if self.userId is None:
             raise TProtocolException(message='Required field userId is unset!')
         if self.type is None:

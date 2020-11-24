@@ -111,13 +111,13 @@ def get_file_upload_path(request: GetFileUploadPathRequest) -> GetFileUploadPath
     user_id = request.userId
     exam_type = request.type
 
-    if not exam_id or not user_id:
+    if not user_id or (exam_type == ExamType.RealExam and not exam_id):
         fill_status_of_resp(resp, InvalidParam())
         return resp
 
     try:
         if exam_type == ExamType.AudioTest:
-            upload_path = service.get_file_upload_path(exam_id, user_id)
+            upload_path = service.get_file_upload_path(user_id=user_id)
         elif exam_type == ExamType.RealExam:
             upload_path = service.get_file_upload_path(exam_id, user_id, request.questionNum)
         else:

@@ -90,14 +90,8 @@ def get_exam_record(user_id: str, template_id: str) -> list:
 
 
 def init_new_audio_test(user_id: str) -> QuestionInfo:
-    wav_test = WavPretestModel()
-    wav_test['text'] = ExamConfig.audio_test["content"]
-    wav_test['user_id'] = user_id
-    wav_test.save()
-
     return QuestionInfo(
-        id=str(wav_test.id),
-        content=wav_test['text'],
+        content=ExamConfig.audio_test["content"],
         type=0,
         readLimitTime=ExamConfig.question_prepare_time[0],
         answerLimitTime=ExamConfig.question_limit_time[0],
@@ -141,17 +135,12 @@ def get_question_info(exam_id: str, question_num: int) -> QuestionInfo:
     return result
 
 
-def get_file_upload_path(exam_id: str, user_id: str, question_num: int = None) -> str:
+def get_file_upload_path(exam_id: str = "audio_test", user_id: str = None, question_num: int = None) -> str:
     if question_num:  # real_exam
         exam = CurrentTestModel.objects(id=exam_id).first()
-    else:  # audio_test
-        exam = WavPretestModel.objects(id=exam_id).first()
-
-    if not exam:
-        logging.error("[get_file_upload_path] no such test! test id: %s" % exam_id)
-        raise ExamNotExist
-
-    if question_num:
+        if not exam:
+            logging.error("[get_file_upload_path] no such test! test id: %s" % exam_id)
+            raise ExamNotExist
         try:
             question = exam.questions[str(question_num)]
         except Exception as e:
@@ -164,12 +153,10 @@ def get_file_upload_path(exam_id: str, user_id: str, question_num: int = None) -
         question.wav_upload_url = upload_path
         question.file_location = 'BOS'
         question.status = 'url_fetched'
-    else:
+        exam.save()
+    else:  # audio_test
         upload_path = exam_manager.generate_upload_path(ExamType.AudioTest, user_id)
-        exam.wav_upload_url = upload_path
-        exam.file_location = 'BOS'
 
-    exam.save()
     logging.info("[get_file_upload_path] exam_id: %s, upload_path: %s, user_id: %s" % (exam_id, upload_path, user_id))
 
     return upload_path
