@@ -53,6 +53,9 @@ class ExamServiceHandler:
     def getExamResult(self, request: GetExamResultRequest) -> GetExamResultResponse:
         return handler.get_exam_result(request)
 
+    def savePaperTemplate(self, request: SavePaperTemplateRequest) -> SavePaperTemplateResponse:
+        return handler.save_paper_template(request)
+
 
 if __name__ == '__main__':
     # init mongo

@@ -1,4 +1,5 @@
 import datetime
+import json
 import logging
 import random
 import time
@@ -174,14 +175,16 @@ def init_new_exam(user_id: str, template_id: str) -> str:
 
 def get_paper_template(template_id: str) -> list:
     if template_id is None:
-        all_templates = PaperTemplate.objects(deprecated=False)
+        all_templates = PaperTemplate.objects()
         tpl_lst = []
         for tpl in all_templates:
             d = ExamTemplate(
                 id=str(tpl.id),
                 name=tpl.name,
-                description=tpl.desc,
-                questionCount=len(tpl.questions)
+                description=json.dumps(tpl.questions),
+                questionCount=len(tpl.questions),
+                isDeprecated=tpl.deprecated,
+                duration=tpl.duration
             )
             tpl_lst.append(d)
         return tpl_lst
@@ -242,3 +245,44 @@ def get_exam_result(exam_id: str) -> (ExamScore, ExamReport):
         return exam_score, exam_report
     else:
         return InProcessing
+
+
+def save_paper_template(new_template: ExamTemplate):
+    # modify
+    if new_template.id:
+        template = PaperTemplate.objects(id=new_template.id).first()
+        if not template:
+            raise TemplateNotExist
+
+        # 禁用模板
+        if new_template.isDeprecated is not None:
+            template.update(deprecated=new_template.isDeprecated)
+        # 修改信息
+        else:
+            try:
+                question_list = json.loads(new_template.description)
+            except Exception:
+                logging.error(
+                    "[save_paper_template] json.loads() failed. paper template desc: " + new_template.description)
+                raise InternalError
+
+            template.update(
+                name=new_template.name,
+                duration=new_template.duration,
+                questions=question_list
+            )
+    # add
+    else:
+        try:
+            question_list = json.loads(new_template.description)
+        except Exception:
+            logging.error("[save_paper_template] json.loads() failed. paper template desc: " + new_template.description)
+            raise InternalError
+
+        new_template = PaperTemplate(
+            name=new_template.name,
+            deprecated=False,
+            duration=new_template.duration,
+            questions=question_list
+        )
+        new_template.save()

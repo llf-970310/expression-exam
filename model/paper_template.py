@@ -28,7 +28,6 @@ class PaperTemplate(Document):
     duration = IntField(min=1, default=1800)  # 考试时长,seconds
 
     name = StringField(max_length=128, required=True)
-    desc = StringField(max_length=512, default=None)
     questions = ListField(required=True)
 
     def total_question_num(self):

@@ -205,3 +205,17 @@ def get_exam_result(request: GetExamResultRequest) -> GetExamResultResponse:
         fill_status_of_resp(resp, e)
 
     return resp
+
+
+@func_log
+def save_paper_template(request: SavePaperTemplateRequest) -> SavePaperTemplateResponse:
+    resp = SavePaperTemplateResponse()
+    new_template = request.newTemplate
+
+    try:
+        service.save_paper_template(new_template)
+        fill_status_of_resp(resp)
+    except ErrorWithCode as e:
+        fill_status_of_resp(resp, e)
+
+    return resp

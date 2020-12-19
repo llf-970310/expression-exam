@@ -34,6 +34,7 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
     print('  GetExamReportResponse getExamReport(GetExamReportRequest request)')
     print('  ComputeExamScoreResponse computeExamScore(ComputeExamScoreRequest request)')
     print('  GetExamRecordResponse getExamRecord(GetExamRecordRequest request)')
+    print('  SavePaperTemplateResponse savePaperTemplate(SavePaperTemplateRequest request)')
     print('')
     sys.exit(0)
 
@@ -172,6 +173,12 @@ elif cmd == 'getExamRecord':
         print('getExamRecord requires 1 args')
         sys.exit(1)
     pp.pprint(client.getExamRecord(eval(args[0]),))
+
+elif cmd == 'savePaperTemplate':
+    if len(args) != 1:
+        print('savePaperTemplate requires 1 args')
+        sys.exit(1)
+    pp.pprint(client.savePaperTemplate(eval(args[0]),))
 
 else:
     print('Unrecognized method %s' % cmd)

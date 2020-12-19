@@ -567,15 +567,19 @@ class ExamTemplate(object):
      - name
      - description
      - questionCount
+     - isDeprecated
+     - duration
 
     """
 
 
-    def __init__(self, id=None, name=None, description=None, questionCount=None,):
+    def __init__(self, id=None, name=None, description=None, questionCount=None, isDeprecated=None, duration=None,):
         self.id = id
         self.name = name
         self.description = description
         self.questionCount = questionCount
+        self.isDeprecated = isDeprecated
+        self.duration = duration
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -606,6 +610,16 @@ class ExamTemplate(object):
                     self.questionCount = iprot.readI32()
                 else:
                     iprot.skip(ftype)
+            elif fid == 5:
+                if ftype == TType.BOOL:
+                    self.isDeprecated = iprot.readBool()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 6:
+                if ftype == TType.I32:
+                    self.duration = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
             else:
                 iprot.skip(ftype)
             iprot.readFieldEnd()
@@ -632,18 +646,20 @@ class ExamTemplate(object):
             oprot.writeFieldBegin('questionCount', TType.I32, 4)
             oprot.writeI32(self.questionCount)
             oprot.writeFieldEnd()
+        if self.isDeprecated is not None:
+            oprot.writeFieldBegin('isDeprecated', TType.BOOL, 5)
+            oprot.writeBool(self.isDeprecated)
+            oprot.writeFieldEnd()
+        if self.duration is not None:
+            oprot.writeFieldBegin('duration', TType.I32, 6)
+            oprot.writeI32(self.duration)
+            oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
 
     def validate(self):
         if self.id is None:
             raise TProtocolException(message='Required field id is unset!')
-        if self.name is None:
-            raise TProtocolException(message='Required field name is unset!')
-        if self.description is None:
-            raise TProtocolException(message='Required field description is unset!')
-        if self.questionCount is None:
-            raise TProtocolException(message='Required field questionCount is unset!')
         return
 
     def __repr__(self):
@@ -2226,6 +2242,138 @@ class GetExamResultResponse(object):
 
     def __ne__(self, other):
         return not (self == other)
+
+
+class SavePaperTemplateRequest(object):
+    """
+    Attributes:
+     - newTemplate
+
+    """
+
+
+    def __init__(self, newTemplate=None,):
+        self.newTemplate = newTemplate
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRUCT:
+                    self.newTemplate = ExamTemplate()
+                    self.newTemplate.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('SavePaperTemplateRequest')
+        if self.newTemplate is not None:
+            oprot.writeFieldBegin('newTemplate', TType.STRUCT, 1)
+            self.newTemplate.write(oprot)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        if self.newTemplate is None:
+            raise TProtocolException(message='Required field newTemplate is unset!')
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+
+
+class SavePaperTemplateResponse(object):
+    """
+    Attributes:
+     - statusCode
+     - statusMsg
+
+    """
+
+
+    def __init__(self, statusCode=None, statusMsg=None,):
+        self.statusCode = statusCode
+        self.statusMsg = statusMsg
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.I32:
+                    self.statusCode = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.STRING:
+                    self.statusMsg = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('SavePaperTemplateResponse')
+        if self.statusCode is not None:
+            oprot.writeFieldBegin('statusCode', TType.I32, 1)
+            oprot.writeI32(self.statusCode)
+            oprot.writeFieldEnd()
+        if self.statusMsg is not None:
+            oprot.writeFieldBegin('statusMsg', TType.STRING, 2)
+            oprot.writeString(self.statusMsg.encode('utf-8') if sys.version_info[0] == 2 else self.statusMsg)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        if self.statusCode is None:
+            raise TProtocolException(message='Required field statusCode is unset!')
+        if self.statusMsg is None:
+            raise TProtocolException(message='Required field statusMsg is unset!')
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
 all_structs.append(ExamScore)
 ExamScore.thrift_spec = (
     None,  # 0
@@ -2277,6 +2425,8 @@ ExamTemplate.thrift_spec = (
     (2, TType.STRING, 'name', 'UTF8', None, ),  # 2
     (3, TType.STRING, 'description', 'UTF8', None, ),  # 3
     (4, TType.I32, 'questionCount', None, None, ),  # 4
+    (5, TType.BOOL, 'isDeprecated', None, None, ),  # 5
+    (6, TType.I32, 'duration', None, None, ),  # 6
 )
 all_structs.append(GetExamReportRequest)
 GetExamReportRequest.thrift_spec = (
@@ -2408,6 +2558,17 @@ GetExamResultResponse.thrift_spec = (
     (2, TType.STRUCT, 'score', [ExamScore, None], None, ),  # 2
     (3, TType.I32, 'statusCode', None, None, ),  # 3
     (4, TType.STRING, 'statusMsg', 'UTF8', None, ),  # 4
+)
+all_structs.append(SavePaperTemplateRequest)
+SavePaperTemplateRequest.thrift_spec = (
+    None,  # 0
+    (1, TType.STRUCT, 'newTemplate', [ExamTemplate, None], None, ),  # 1
+)
+all_structs.append(SavePaperTemplateResponse)
+SavePaperTemplateResponse.thrift_spec = (
+    None,  # 0
+    (1, TType.I32, 'statusCode', None, None, ),  # 1
+    (2, TType.STRING, 'statusMsg', 'UTF8', None, ),  # 2
 )
 fix_spec(all_structs)
 del all_structs
