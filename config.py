@@ -22,7 +22,7 @@ class ReportConfig(object):
 
 
 class MongoConfig:
-    host = '106.13.160.74'
+    host = 'mongo-server.expression.hosts'
     port = 27017
     auth = 'SCRAM-SHA-1'  # auth mechanism, set to None if auth is not needed
     user = 'iselab'
