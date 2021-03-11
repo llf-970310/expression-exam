@@ -38,6 +38,7 @@ def get_score_and_feature(question_list):
             feature[i] = {}
             if question_list[str(i)]['status'] == 'handling':
                 handling = True
+                break
 
     return handling, score, feature
 
